@@ -8,8 +8,7 @@ import os
 class ConfigurableABC(ABC):
     @property
     @abstractmethod
-    def CONFIGS_PATH(self):
-        """Każda klasa pochodna musi zdefiniować CONFIGS_PATH"""
+    def CONFIGS_PATH(self):        
         pass
 
     def __init__(self):        
