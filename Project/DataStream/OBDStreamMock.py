@@ -28,7 +28,7 @@ class OBDStreamMock(OBDStreamABC):
         self.virtual_time = self.stream_data.iloc[0]['timestamp']                
         self._last_wall_time = time.perf_counter()
 
-        self.is_opened = True # POPRAWKA: is_opened zamiast is_open
+        self.is_opened = True
         self._stop_event.clear()
         
         self._thread = threading.Thread(target=self._run_loop, daemon=True)
@@ -61,11 +61,13 @@ class OBDStreamMock(OBDStreamABC):
             if data_changed:
                 current_row = self.stream_data.iloc[self._data_index]
                 self.contract.rpm = current_row['rpm']
+                self.contract.rpm_timestamp = current_row['timestamp']
                 self.contract.speed = current_row['speed']
+                self.contract.speed_timestamp = current_row['timestamp']
 
     def close(self):
         self.is_opened = False
-        if self._thread:
+        if self._thread and self._thread.is_alive():
             self._stop_event.set()
             self._thread.join()
             self._thread = None
