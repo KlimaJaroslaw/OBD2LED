@@ -3,9 +3,9 @@ from Project.Configurable.ConfigurableABC import ConfigurableABC
 from Project.obdContract import OBDContract
 
 class OBDStreamABC(ConfigurableABC):
-    def __init__(self, contract: OBDContract):
+    def __init__(self):
         super().__init__()
-        self.contract = contract
+        self.contract = OBDContract()
         self.is_opened = False
     
     @property

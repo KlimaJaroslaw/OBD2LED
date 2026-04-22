@@ -11,8 +11,8 @@ class OBDStreamMock(OBDStreamABC):
     def CONFIGS_PATH(self):
         return "Project/Configs/Streams/Mock"
     
-    def __init__(self, contract: OBDContract):
-        super().__init__(contract)
+    def __init__(self):
+        super().__init__()
         self._lock = threading.Lock()
         self._stop_event = threading.Event()
         self._thread = None

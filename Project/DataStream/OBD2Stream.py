@@ -21,11 +21,11 @@ class OBD2Stream(OBDStreamABC):
     def CONFIGS_PATH(self):
         return "Project/Configs/Streams/OBD2"
     
-    def __init__(self, contract):        
+    def __init__(self):        
         if hasattr(self, '_initialized') and self._initialized:
             return
         
-        super().__init__(contract)
+        super().__init__()
         self.lock = threading.Lock()
         self.stop_event = threading.Event()
         self._thread = None
