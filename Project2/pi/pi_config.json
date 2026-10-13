@@ -1,0 +1,8 @@
+{
+  "profile": "focus",
+  "log_level": "INFO",
+  "buttons": [
+    {"pin": 17, "action": "next_program"},
+    {"pin": 27, "action": "next_theme"}
+  ]
+}
