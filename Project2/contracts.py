@@ -27,6 +27,7 @@ class LedDevice(Protocol):
     count: int
     def show(self, pixels: Sequence[RGB]) -> None: ...
     def close(self) -> None: ...
+    # optional: def poll(self) -> list[dict]  -- runtime commands from the device (keyboard, window close)
 
 class Canvas:
     def __init__(self, n: int):
