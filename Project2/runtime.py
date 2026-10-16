@@ -71,7 +71,9 @@ class Output:
 
         sel = spec.get("programs", {})
         startup = sel.get("startup")
-        self.cycle = sel.get("cycle") or [p for p in self._specs if not startup or p != startup["program"]]
+        # default cycle: every program that isn't some device's startup animation
+        intros = {d.get("programs", {}).get("startup", {}).get("program") for d in profile["devices"]}
+        self.cycle = sel.get("cycle") or [p for p in self._specs if p not in intros]
         initial = sel.get("initial", {})
         self._initial = (initial.get("program", self.cycle[0]), initial.get("theme", next(iter(themes))))
 
@@ -138,6 +140,16 @@ class Output:
                 self.canvas.fill(self.theme.color("off"))
         self.device.show(self.canvas.pixels)
 
+    def poll(self):
+        """Commands produced by the device itself (optional `poll()`, e.g. pygame keyboard).
+        "device": "self" means this output."""
+        poll = getattr(self.device, "poll", None)
+        cmds = poll() if poll else []
+        for cmd in cmds:
+            if cmd.get("device") == "self":
+                cmd["device"] = self.name
+        return cmds
+
     def close(self):
         self.device.close()
 
@@ -193,6 +205,9 @@ def run(profile, command_queue=None):
         period = 1 / profile.get("fps", 60)
         last = time.monotonic()
         while True:
+            for o in outputs:
+                for cmd in o.poll():
+                    command_queue.put(cmd)
             while True:  # drain everything queued since the last frame
                 try:
                     cmd = command_queue.get_nowait()

@@ -32,13 +32,25 @@
   },
   "devices": [
     {
-      "name": "console",
-      "type": "console",
-      "count": 40,
+      "name": "dash",
+      "type": "pygame",
+      "label": "dash (30)",
+      "count": 30,
       "programs": {
         "startup": {"program": "intro", "theme": "default"},
         "initial": {"program": "rpm", "theme": "default"},
         "cycle": ["rpm", "speed", "rpm_shift"]
+      }
+    },
+    {
+      "name": "ambient",
+      "type": "pygame",
+      "label": "ambient (60)",
+      "count": 60,
+      "size": 14,
+      "gap": 4,
+      "programs": {
+        "initial": {"program": "speed", "theme": "night"}
       }
     }
   ]

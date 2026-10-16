@@ -1,0 +1,4 @@
+# Development machine (replay source + pygame/console devices)
+obd>=0.7.3
+pandas>=2.0
+pygame>=2.5
