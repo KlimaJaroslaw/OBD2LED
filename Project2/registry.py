@@ -11,7 +11,7 @@ def register(table, name):
     return deco
 
 def build(table, spec, **extra):
-    """{"type": "replay", "file": "x.pkl"} -> SOURCES["replay"](file="x.pkl", **extra)"""
+    """{"type": "replay", "file": "x.csv"} -> SOURCES["replay"](file="x.csv", **extra)"""
     spec = dict(spec)
     kind = spec.pop("type")
     if kind not in table:

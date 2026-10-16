@@ -8,9 +8,10 @@ OWNER=$(stat -c %U "$DIR")
 as_owner() { runuser -u "$OWNER" -- "$@"; }
 
 apt-get update -q
-apt-get install -y git python3-venv python3-dev build-essential python3-gpiozero python3-lgpio python3-pandas
+apt-get install -y git python3-venv python3-dev build-essential python3-gpiozero python3-lgpio
+apt-get clean  # drop the downloaded .debs, SD cards are small
 
-# system site packages: gpiozero, lgpio and pandas (replay source) come from apt
+# system site packages: gpiozero + lgpio come from apt
 [ -x "$DIR/.venv/bin/python" ] || as_owner python3 -m venv --system-site-packages "$DIR/.venv"
 as_owner "$DIR/.venv/bin/pip" install -q -r "$DIR/Project2/requirements-pi.txt"
 

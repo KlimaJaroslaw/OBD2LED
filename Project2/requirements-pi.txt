@@ -1,5 +1,4 @@
 # Raspberry Pi (live OBD source + ws281x strip + GPIO buttons)
-# pandas for the replay source (pi_demo profile) comes from apt, see pi/install.sh
 obd>=0.7.3
 rpi_ws281x>=5.0
 gpiozero>=2.0
