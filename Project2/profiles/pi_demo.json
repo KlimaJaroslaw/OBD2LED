@@ -1,10 +1,10 @@
 {
   "name": "pi_demo",
-  "fps": 60,
-  "source": {"type": "replay", "file": "obd_readings3.csv", "speed": 1.0, "interpolate": true},
+  "fps": 120,
+  "source": {"type": "replay", "file": "obd_readings4.csv", "speed": 1.0, "interpolate": true},
   "params": {
-    "min_rpm": 1100,
-    "max_rpm": 3500,
+    "min_rpm": 1000,
+    "max_rpm": 7000,
     "min_speed": 30,
     "max_speed": 140
   },
