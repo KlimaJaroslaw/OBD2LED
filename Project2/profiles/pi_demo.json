@@ -1,0 +1,47 @@
+{
+  "name": "pi_demo",
+  "fps": 60,
+  "source": {"type": "replay", "file": "obd_readings3.pkl", "speed": 1.0, "interpolate": true},
+  "params": {
+    "min_rpm": 1100,
+    "max_rpm": 3500,
+    "min_speed": 30,
+    "max_speed": 140
+  },
+  "programs": {
+    "rpm":       {"type": "rpm_bar"},
+    "speed":     {"type": "speed_bar"},
+    "rpm_shift": {"type": "rpm_bar", "min_rpm": 2000, "max_rpm": 3500, "gradient": "shift"},
+    "intro":     {"type": "startup_sweep", "duration": 2.0}
+  },
+  "themes": {
+    "default": {
+      "primary": "#ffff00", "secondary": "#00ffff", "off": "#000000",
+      "gradients": {
+        "load":  [[0.0, "#00ff00"], [0.6, "#ffff00"], [1.0, "#ff0000"]],
+        "shift": [[0.0, "#0040ff"], [0.8, "#0040ff"], [0.81, "#ff0000"], [1.0, "#ff0000"]]
+      }
+    },
+    "night": {
+      "primary": "#402000", "secondary": "#002040", "off": "#000000",
+      "gradients": {
+        "load":  [[0.0, "#003000"], [1.0, "#600000"]],
+        "shift": [[0.0, "#001040"], [0.8, "#001040"], [0.81, "#600000"], [1.0, "#600000"]]
+      }
+    }
+  },
+  "devices": [
+    {
+      "name": "dash",
+      "type": "ws281x",
+      "count": 30,
+      "data_pin": 18,
+      "brightness": 0.5,
+      "programs": {
+        "startup": {"program": "intro", "theme": "default"},
+        "initial": {"program": "rpm", "theme": "default"},
+        "cycle": ["rpm", "speed", "rpm_shift"]
+      }
+    }
+  ]
+}
