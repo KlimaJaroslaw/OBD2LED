@@ -1,8 +1,14 @@
 {
-  "profile": "focus",
+  "profile": "pi_demo",
   "log_level": "INFO",
   "buttons": [
-    {"pin": 17, "action": "next_program"},
-    {"pin": 27, "action": "next_theme"}
+    {
+      "pin": 17,
+      "action": "next_program"
+    },
+    {
+      "pin": 27,
+      "action": "next_theme"
+    }
   ]
 }
