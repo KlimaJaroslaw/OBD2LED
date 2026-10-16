@@ -24,7 +24,10 @@ def main(config_path=Path(__file__).resolve().parent / "pi_config.json"):
         button.when_pressed = lambda cmd=cmd: command_queue.put(cmd)
         buttons.append(button)
 
-    run(load_profile(config["profile"]), command_queue=command_queue)
+    try:
+        run(load_profile(config["profile"]), command_queue=command_queue)
+    except KeyboardInterrupt:  # Ctrl+C, or systemctl stop (KillSignal=SIGINT)
+        pass
 
 
 if __name__ == "__main__":

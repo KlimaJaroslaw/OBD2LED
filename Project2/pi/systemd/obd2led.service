@@ -1,0 +1,19 @@
+[Unit]
+Description=OBD2LED (OBD-II telemetry on LED strips)
+After=local-fs.target
+
+[Service]
+Type=simple
+# root: rpi_ws281x needs it for PWM/DMA on GPIO18
+User=root
+WorkingDirectory=@DIR@
+ExecStart=@DIR@/.venv/bin/python -m Project2.pi.pi_main
+Restart=always
+RestartSec=3
+# SIGINT lets runtime.run() close the devices (strip goes dark instead of freezing)
+KillSignal=SIGINT
+TimeoutStopSec=10
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
