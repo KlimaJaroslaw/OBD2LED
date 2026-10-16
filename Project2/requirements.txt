@@ -1,4 +1,4 @@
 # Development machine (replay source + pygame/console devices)
 obd>=0.7.3
-pandas>=2.0
+pandas>=2.0  # only for .pkl recordings and the notebooks; replay of .csv needs nothing
 pygame>=2.5

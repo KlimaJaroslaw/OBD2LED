@@ -1,4 +1,5 @@
 import bisect
+import csv
 import logging
 import threading
 import time
@@ -14,27 +15,29 @@ RESOURCES = Path(__file__).resolve().parent.parent / "resources"
 
 @register(SOURCES, "replay")
 class ReplaySource:
-    """Plays back a recorded drive (pickled pandas DataFrame) in real time.
+    """Plays back a recorded drive in real time.
 
     Recording format: a `timestamp` column (epoch seconds) plus one column per
     signal, named like the live source's signals ("rpm", "speed", ...).
+    .csv is read with the standard library (use it on the Pi); .pkl is a pickled
+    pandas DataFrame, which only loads with a pandas version close to the one
+    that wrote it.
 
     Telemetry clock is the recording's own clock: `now` is the virtual playback
     time and each Reading.time is the timestamp of the row it came from, so
     `now - reading.time` (staleness) behaves the same as with the live source.
     """
 
-    def __init__(self, file="obd_readings.pkl", speed=1.0, loop=True, interpolate=False):
-        import pandas as pd  # only needed for replay; keeps the Pi free of pandas
-
+    def __init__(self, file="obd_readings.csv", speed=1.0, loop=True, interpolate=False):
         path = Path(file)
         if not path.is_absolute() and not path.exists():
             path = RESOURCES / path
-        df = pd.read_pickle(path).sort_values("timestamp")
+        rows = _read_pickle(path) if path.suffix == ".pkl" else _read_csv(path)
+        rows.sort(key=lambda r: r["timestamp"])
 
         self.speed, self.loop, self.interpolate = float(speed), loop, interpolate
-        self._times: list[float] = df["timestamp"].astype(float).tolist()
-        self._columns = {c: df[c].astype(float).tolist() for c in df.columns if c != "timestamp"}
+        self._times: list[float] = [r["timestamp"] for r in rows]
+        self._columns = {c: [r[c] for r in rows] for c in rows[0] if c != "timestamp"}
 
         t = self._times
         step = (t[-1] - t[0]) / (len(t) - 1) if len(t) > 1 else 0.0
@@ -85,3 +88,17 @@ class ReplaySource:
     def stop(self):
         with self._lock:
             self._started_at = None
+
+
+def _read_csv(path):
+    """Rows as {column: float}; an empty cell is NaN (signal not sampled in that row)."""
+    with open(path, newline="") as f:
+        return [{k: float(v) if v != "" else float("nan") for k, v in row.items()}
+                for row in csv.DictReader(f)]
+
+
+def _read_pickle(path):
+    import pandas as pd  # only for .pkl recordings; the Pi replays .csv without pandas
+
+    df = pd.read_pickle(path)
+    return [{k: float(v) for k, v in row.items()} for row in df.to_dict("records")]

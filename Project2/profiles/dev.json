@@ -1,7 +1,7 @@
 {
   "name": "dev",
   "fps": 60,
-  "source": {"type": "replay", "file": "obd_readings3.pkl", "speed": 1.0, "interpolate": true},
+  "source": {"type": "replay", "file": "obd_readings3.csv", "speed": 1.0, "interpolate": true},
   "params": {
     "min_rpm": 800,
     "max_rpm": 4000,
