@@ -36,7 +36,7 @@
       "type": "ws281x",
       "count": 300,
       "data_pin": 18,
-      "brightness": 0.5,
+      "brightness": 1.0,
       "programs": {
         "startup": {"program": "intro", "theme": "default"},
         "initial": {"program": "rpm", "theme": "default"},
