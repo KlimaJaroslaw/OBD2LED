@@ -47,9 +47,11 @@ class Ws281xDevice:
             return  # nothing changed, skip the DMA transfer
         self._last = list(pixels)
         ordered = reversed(pixels) if self.reverse else pixels
-        self._strip[:] = [(r << 16) | (g << 8) | b for r, g, b in ordered]
+        # per index: rpi_ws281x's strip[:] = x fills every LED with the single value x
+        for i, (r, g, b) in enumerate(ordered):
+            self._strip[i] = (r << 16) | (g << 8) | b
         self._strip.show()
 
     def close(self):
-        self._strip[:] = [0] * self.count
+        self._strip[:] = 0
         self._strip.show()  # leave the strip dark, not frozen on the last frame
