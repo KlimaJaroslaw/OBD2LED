@@ -34,7 +34,7 @@
     {
       "name": "dash",
       "type": "ws281x",
-      "count": 30,
+      "count": 300,
       "data_pin": 18,
       "brightness": 0.5,
       "programs": {
